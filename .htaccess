@@ -1,0 +1,3 @@
+RewriteEngine on
+RewriteCond $1 !^(index\.php|images|css|robots\.txt|js|files|icons|images)
+RewriteRule ^(.*)$ /xumb/index.php?/$1 [L]
