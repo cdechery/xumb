@@ -7,9 +7,6 @@ class Image_model extends CI_Model {
 	public function __construct() 	{
 		parent::__construct();
 		$this->load->helper('image');
-
-		// load distribution configuration
-		$this->dist = $this->config->item('dist');
 	}
  
 	public function insert($upload_data, $image_data, $thumb_sizes = array() )	{

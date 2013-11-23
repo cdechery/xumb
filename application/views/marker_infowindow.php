@@ -29,7 +29,8 @@
 	}
 
 	if( $login_data["logged_in"] && $login_data["user_id"]==$data["user_id"] ) {
-		echo "<br>[<a href=\"./map/modify_marker/".$data['id']."\">Modify</a>]";
+		echo "<br>[<a href=\"./map/modify_marker/".$data['id']."\">Modify</a>] | ";
+		echo "[<a href=\"#\" class=\"delete_marker_link\" data-marker_id=\"".$data['id']."\">Delete</a>]";
 	} else {
 		echo "<br>[<a href=\"./map/show_marker/".$data['id']."\">More</a>]";
 	}

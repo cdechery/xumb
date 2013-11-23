@@ -20,8 +20,14 @@ body {
 	background-color:#787977;font-size:14px;margin:0px;
 }
 .corners {
-	padding:15px; line-height:18px; -moz-border-radius:10px; -khtml-border-radius:10px; -webkit-border-radius:10px; border-radius:10px; -moz-box-sizing:content-box; -webkit-box-sizing:content-box; -khtml-box-sizing:content-box; box-sizing:content-box
+	padding:15px; line-height:18px; 
+	-moz-border-radius:10px; -khtml-border-radius:10px; 
+	-webkit-border-radius:10px; border-radius:10px; 
+	-moz-box-sizing:content-box; 
+	-webkit-box-sizing:content-box; 
+	-khtml-box-sizing:content-box; box-sizing:content-box
 }
+
 #body_container {
 	margin:20px 0px 0px;width:800px;background-color:#fff;padding:20px;
 }

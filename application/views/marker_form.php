@@ -17,7 +17,7 @@
 <h5>Details</h5>
 <textarea name="description"><?php echo $description; ?></textarea>
 
-<div><input type="submit" value="<?php echo label('update')?>" /></div>
+<div><input type="submit" value="<?php echo xlabel('update')?>" /> <input type="button" class="delete_marker_btn" data-marker_id="<?php echo $id; ?>" value="Remover" /></div>
 </form>
 	   
 	   <h5>Upload Image</h5>
@@ -28,7 +28,7 @@
 	      <input type="text" name="title" id="title" value="" title="Name is optional"/><br>
 	      <input type="file" name="userfile" id="userfile" size="20" title="File"/><br>
 	 
-	      <input type="submit" name="submit" id="submit" value="<?php echo label('upload')?>" />
+	      <input type="submit" name="submit" id="submit" value="<?php echo xlabel('upload')?>" />
 	   </form>
 	   <h5>Images</h5>
 	   <div id="images"></div>

@@ -8,11 +8,11 @@
 		extract($data);
 	}
 
-	$actions = array("insert"=>label('insert'), "update"=>label('update'));
+	$actions = array("insert"=>xlabel('insert'), "update"=>xlabel('update'));
 	if( empty($avatar) ) {
 		$avatar = "images/default_avatar.gif";
 	} else {
-		$avatar = "files/".$avatar;
+		$avatar = $dist['upload']['path'].$avatar;
 	}
 
 	$login_disabled = "";
@@ -34,7 +34,7 @@
 		<input type="file" id="userfile" name="userfile" style="display: none;" />
 		<input type="button" value="Browse ..." onclick="document.getElementById('userfile').click();" />
 
-	      <br><input type="submit" name="Upload" id="submit" value="<?php echo label('upload')?>" />
+	      <br><input type="submit" name="Upload" id="submit" value="<?php echo xlabel('upload')?>" />
 	   </form>
 <?php
 	}

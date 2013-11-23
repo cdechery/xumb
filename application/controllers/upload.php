@@ -18,7 +18,7 @@ class Upload extends MY_Controller {
 
 		if( !$this->is_user_logged_in ) {
 			$status = "error";
-			$msg = langp('dist_errsess_expire');
+			$msg = xlang('dist_errsess_expire');
 			echo json_encode(array('status' => $status, 'msg' => utf8_encode($msg), "file_id" => $file_id) );
 			return;
 		}
@@ -42,7 +42,7 @@ class Upload extends MY_Controller {
 
 			if( $data['image_height']< $min_image_size || $data['image_width']< $min_image_size ) {
 				$status="error";
-				$msg = langp('dist_min_image_size', $min_image_size);
+				$msg = xlang('dist_min_image_size', $min_image_size);
 			} else {
 				$thumbSizes = $this->input->post('thumbs');
 				if( !empty($thumbSizes) ) {
@@ -62,11 +62,11 @@ class Upload extends MY_Controller {
 
 				if( $file_id ) {
 					$status = "success";
-					$msg = langp('dist_imgupload_ok');
+					$msg = xlang('dist_imgupload_ok');
 				} else {
 					@unlink( $data['full_path'] );
 					$status = "error";
-					$msg = langp('dist_imgupload_nok');
+					$msg = xlang('dist_imgupload_nok');
 				}
 			}
 		}
@@ -78,7 +78,7 @@ class Upload extends MY_Controller {
 	public function upload_avatar() {
 		if( !$this->is_user_logged_in ) {
 			$status = "error";
-			$msg = langp('dist_errsess_expire');
+			$msg = xlang('dist_errsess_expire');
 			echo json_encode( array('status' => $status, 'msg' => utf8_encode($msg)) );
 			return;
 		}
@@ -91,7 +91,9 @@ class Upload extends MY_Controller {
 
 		$file_element_name = 'userfile';
 
-		$config['upload_path'] = $this->dist['upload']['path'];
+		$upload_path = $this->dist['upload']['path'];
+
+		$config['upload_path'] = $upload_path;
 		$config['allowed_types'] = implode("|",$this->dist['image_settings']['allowed_types']);
 		$config['max_size']  = $this->dist['upload']['max_size'];
 		$config['encrypt_name'] = TRUE;
@@ -109,7 +111,7 @@ class Upload extends MY_Controller {
 			if( $upload_data['image_height']< $min_image_size ||
 					$upload_data['image_width']< $min_image_size ) {
 				$status="error";
-				$msg = langp('dist_min_image_size', $min_image_size);
+				$msg = xlang('dist_min_image_size', $min_image_size);
 			} else {
 				$thumbSizes = $this->input->post('thumbs');
 				if( !empty($thumbSizes) ) {
@@ -120,12 +122,12 @@ class Upload extends MY_Controller {
 
 				if( $this->user_model->update_avatar( $upload_data, $user_id, $thumbSizes ) ) {
 					$status = "success";
-					$msg = langp('dist_imgupload_ok');
-					$img_src = base_url().'files/'.thumb_filename($upload_data['file_name'], 200);
+					$msg = xlang('dist_imgupload_ok');
+					$img_src = base_url().$upload_path.thumb_filename($upload_data['file_name'], 200);
 				} else {
 					@unlink( $data['full_path'] );
 					$status = "error";
-					$msg = langp('dist_imgupload_nok');
+					$msg = xlang('dist_imgupload_nok');
 				}
 			}
 		}
@@ -142,7 +144,7 @@ class Upload extends MY_Controller {
 	public function delete_image( $id ) {
 		if( !$this->is_user_logged_in ) {
 			$status = "error";
-			$msg = langp('dist_errsess_expire');
+			$msg = xlang('dist_errsess_expire');
 			echo json_encode( array('status' => $status, 'msg' => utf8_encode($msg)) );
 			return;
 		}
@@ -151,10 +153,10 @@ class Upload extends MY_Controller {
 		
 		if( !$this->image_model->delete( $id ) ) {
  			$status = 'error';
-      		$msg = langp('dist_imgdel_ok');
+      		$msg = xlang('dist_imgdel_ok');
 		} else {
 			$status = "success";
-			$msg = langp('dist_imgdel_nok');
+			$msg = xlang('dist_imgdel_nok');
 		}
 		$msg = utf8_encode( $msg );
 		echo json_encode( array('status' => $status, 'msg' => utf8_encode($msg)) );

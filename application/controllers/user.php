@@ -38,13 +38,13 @@ class User extends MY_Controller {
 
 		$this->form_validation->set_error_delimiters('','</br>');
 
-		$this->form_validation->set_rules('login', label('username'), 'required|min_length[5]|max_length[12]|is_unique[user.login]|xss_clean');
-		$this->form_validation->set_rules('name', label('name'), 'required|min_length[5]|max_length[50]');
-		$this->form_validation->set_rules('surname', label('surname'), 'required|min_length[5]|max_length[50]');
-		$this->form_validation->set_rules('email', label('email'), 'required|is_unique[user.email]|valid_email');
-		$this->form_validation->set_rules('password', label('password'), 'required');
-		$this->form_validation->set_rules('password_2', label('passconf'), 'required|matches[password]');
-		$this->form_validation->set_rules('zipcode', label('zip'), 'numeric');
+		$this->form_validation->set_rules('login', xlabel('username'), 'required|min_length[5]|max_length[12]|is_unique[user.login]|xss_clean');
+		$this->form_validation->set_rules('name', xlabel('name'), 'required|min_length[5]|max_length[50]');
+		$this->form_validation->set_rules('surname', xlabel('surname'), 'required|min_length[5]|max_length[50]');
+		$this->form_validation->set_rules('email', xlabel('email'), 'required|is_unique[user.email]|valid_email');
+		$this->form_validation->set_rules('password', xlabel('password'), 'required');
+		$this->form_validation->set_rules('password_2', xlabel('passconf'), 'required|matches[password]');
+		$this->form_validation->set_rules('zipcode', xlabel('zip'), 'numeric');
 
 		if ($this->form_validation->run() == FALSE) {
 			$status = "ERROR";
@@ -54,10 +54,10 @@ class User extends MY_Controller {
 
 			if( $new_id > 0 ) {
 				$status = "OK";
-				$msg = langp('dist_newuser_ok');
+				$msg = xlang('dist_newuser_ok');
 			} else {
 				$status = "ERROR";
-				$msg = langp('dist_newuser_nok');
+				$msg = xlang('dist_newuser_nok');
 			}
 		}
 
@@ -66,7 +66,7 @@ class User extends MY_Controller {
 
 	public function modify() {
 		if( !$this->is_user_logged_in ) {
-			show_error( langp('dist_errsess_expire') );
+			show_error( xlang('dist_errsess_expire') );
 		}
 
 		$this->load->helper('image_helper');
@@ -92,7 +92,7 @@ class User extends MY_Controller {
 
 		if( !$this->is_user_logged_in ) {
 			$status = "error";
-			$msg = langp('dist_errsess_expire');
+			$msg = xlang('dist_errsess_expire');
 		} else {
 			$user_data = $this->input->post(NULL, TRUE);
 
@@ -116,10 +116,10 @@ class User extends MY_Controller {
 
 				if( $ret_update ) {
 					$status = "OK";
-					$msg = langp('dist_upduser_ok');
+					$msg = xlang('dist_upduser_ok');
 				} else {
 					$status = "ERROR";
-					$msg = langp('dist_upduser_nok');
+					$msg = xlang('dist_upduser_nok');
 				}
 			}
 		}
@@ -129,7 +129,7 @@ class User extends MY_Controller {
 
 	public function email_check($email) {
 		if( $this->user_model->email_exists($email, $this->login_data['user_id']) ) {
-			$this->form_validation->set_message('email_check', langp('dist_upduser_email') );
+			$this->form_validation->set_message('email_check', xlang('dist_upduser_email') );
 			return FALSE;
 		} else {
 			return TRUE;

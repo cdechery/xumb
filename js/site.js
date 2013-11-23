@@ -178,6 +178,57 @@ $(function() {
 	}); // delete
 });
 
+function delete_marker_map( link ) {
+	$.ajax({
+		url         : site_root + 'map/delete_marker/' + link.data('marker_id'),
+		contentType    : 'charset=utf-8',
+		dataType : 'json',
+		success : function (data) {
+			if (data.status === "success") {
+				var markerVar = eval('marker_'+link.data('marker_id'));
+				markerVar.setMap(null);
+			} else {
+				new Messi(data.msg, {title: lang['error'], tttleClass: 'anim error', buttons: [{id: 0, label: 'Fechar', val: 'X'}]});
+			}
+		}
+	});
+}
+
+$(function() {
+	$(document).on('click', '.delete_marker_link', function(e) {
+	e.preventDefault();
+	var link = $(this);
+	new Messi('Deseja apagar o Marcador? Todas as imagens serão excluídas também.', {modal: true, buttons: [{id: 0, label: 'Sim', val: 'S'}, {id: 1, label: 'Não', val: 'N'}], callback: function(val) { if(val=='S') delete_marker_map(link); }});
+	// TODO lang
+	return false;
+	}); // delete
+});
+
+function delete_marker( btn ) {
+	$.ajax({
+		url         : site_root + 'map/delete_marker/' + btn.data('marker_id'),
+		contentType    : 'charset=utf-8',
+		dataType : 'json',
+		success : function (data) {
+			if (data.status === "success") {
+				new Messi('Marcador excluído com sucesso!', {title: lang['success'], titleClass: 'success', modal: true, buttons: [{id: 0, label: 'OK', val: 'S'}], callback: function(val) { go_home(); } });
+			} else {
+				new Messi(data.msg, {title: lang['error'], tttleClass: 'anim error', buttons: [{id: 0, label: 'Fechar', val: 'X'}]});
+			}
+		}
+	});
+}
+
+$(function() {
+	$(document).on('click', '.delete_marker_btn', function(e) {
+	e.preventDefault();
+	var btn = $(this);
+	new Messi('Deseja apagar o Marcador? Todas as imagens serão excluídas também.', {modal: true, buttons: [{id: 0, label: 'Sim', val: 'S'}, {id: 1, label: 'Não', val: 'N'}], callback: function(val) { if(val=='S') delete_marker(btn); }});
+	// TODO lang
+	return false;
+	}); // delete
+});
+
 function refresh_marker_images( marker_id ) {
 	$.get(site_root + 'map/list_images/'+marker_id+'/200')
 		.success(function (data) {

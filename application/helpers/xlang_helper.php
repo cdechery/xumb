@@ -1,6 +1,6 @@
 <?php
 /*
- * Helper to load CSS libs
+ * Custom Xumb helper to provide simple methods for loading Language Lines and Labels, with parameters
  */
  /**
      * Fetch a single line of text from the language array. Takes variable number
@@ -10,7 +10,7 @@
      * @access public
      * @return mixed false if not found or the language string
      */
-    function langp() {
+    function xlang() {
         //get the arguments passed to the function
         $args = func_get_args();
 
@@ -45,7 +45,7 @@
         return $line;
     }
 
-    function label( $line ) {
+    function xlabel( $line ) {
         $CI =& get_instance();
         
         if( isset($CI->lang->language['dist_lbl_'.$line]) ) {

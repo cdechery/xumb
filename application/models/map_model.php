@@ -35,6 +35,11 @@ class Map_model extends MY_Model {
 		
 		return( $this->db->update('marker', $update, array('id' => $data['id'])) );	
 	}
+
+	public function delete_marker( $id ) {
+		$this->db->delete('marker', array('id'=>$id) );
+		return ( $this->db->affected_rows()>0 );
+	}
 	
 	public function get_category( $id = NULL ) {
 		if( $id === NULL ) {

@@ -32,7 +32,7 @@ class Login extends MY_Controller {
 
 			redirect( base_url() );
 		} else {
-			$this->index( langp('dist_login_failed') );
+			$this->index( xlang('dist_login_failed') );
 		}
 	}
 }
