@@ -8,6 +8,7 @@ $lang['dist_login_failed']			= "Login ou senha inválidos, tente novamente";
 
 $lang['dist_imgupload_ok']			= "Imagem enviada com sucesso";
 $lang['dist_imgupload_nok']			= "Ocorreu algum problema ao enviar a imagem, tente novamente";
+$lang['dist_imgupload_max']			= "O máximo de imagens permitidas foi atingido";
 
 $lang['dist_imgdel_ok']				= "Imagem excluída com sucesso";
 $lang['dist_imgdel_nok']			= "Ocorreu algum problema ao excluir a imagem, tente novamente";
@@ -20,6 +21,11 @@ $lang['dist_upduser_ok']			= "Usuário atualizado com sucesso";
 $lang['dist_upduser_nok']			= "Ocorreu um erro inesperado ao atualizar o usuário";
 $lang['dist_upduser_email']			= "O email selecionado já está em uso";
 
+$lang['dist_error_head']			= "Ocorreu um erro";
+$lang['dist_error_upload']			= "Não foi possível realizar o upload";
+$lang['dist_mrkdel_confirm']		= "Tem certeza que deseja apagar este Marcador?";
+$lang['dist_mrkdel_ok']				= "Marcador excluído com sucesso";
+$lang['dist_error_mrkdel']			= "Ocorreu um erro ao excluir esse marcador";
 $lang['dist_general_error']			= "Tivemos um erro inesperado. Estamos trabalhando para reparar, volte mais tarde.";
 
 $lang['dist_errperm_marker']		= "Você não está autorizado a alterar este Marcador";

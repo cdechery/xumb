@@ -2261,7 +2261,8 @@ class Googlemaps {
 			$file_name = uniqid("sq").".jpg";
 
 			$CI =& get_instance();
-			$full_path = realpath( $CI->config->item('dist')['upload']['path'] );
+			$dist = $CI->config->item('dist');
+			$full_path = realpath( $dist['upload']['path'] );
 			if( @file_put_contents($full_path."/".$file_name, $data) ) {
 				$status = "OK";
 			} else {

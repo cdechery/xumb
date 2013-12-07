@@ -38,7 +38,7 @@
 			Double-click to add a Marker<br>(you must be logged in for that)
 		</div>
 		<div id="mrkShown-<?php echo $categ?>categ">
-			Marcadores exibidos: <span id="markersShown">Todos</span> <input style="font-size: small;" type="button" value="Alternar" onClick="toggleMarkers();">
+			Markers shown: <span id="markersShown" style="display: inline-block; width: 50px;">All</span> <input style="font-size: small;" type="button" value="Toggle" onClick="toggleMarkers();">
 		</div>
 <?php
 	if( isset($categories) ) {
@@ -72,7 +72,7 @@
 					markers_not_owned[i].setVisible( false );
 				}
 				markersShown = 'user';
-				label.innerHTML = 'Usuário'; // TODO lang
+				label.innerHTML = 'User'; // TODO lang
 				break;
 
 			case 'user':
@@ -82,7 +82,7 @@
 				for(var i=0; i<markers_owned.length; i++) {
 					markers_owned[i].setVisible( false );
 				}
-				label.innerHTML = 'Outros';
+				label.innerHTML = 'Others';
 				markersShown = 'others';
 				break;
 
@@ -90,7 +90,7 @@
 				for(var i=0; i<markers_owned.length; i++) {
 					markers_owned[i].setVisible( true );
 				}
-				label.innerHTML = 'Todos';
+				label.innerHTML = 'All';
 				markersShown = 'all';
 				break;
 		}

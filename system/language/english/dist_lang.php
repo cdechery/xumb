@@ -12,6 +12,7 @@ $lang['dist_imgupload_nok']			= "There was an error uploading the image, try aga
 $lang['dist_imgdel_ok']				= "Image deleted successfully";
 $lang['dist_imgdel_nok']			= "There was an error deleting the image, try again";
 $lang['dist_imgdel_confirm']		= "Are you sure you want to delete this image?";
+$lang['dist_imgupload_max']			= "You have reached the maximum allowed images";
 
 $lang['dist_newuser_ok']			= "New user created successfully";
 $lang['dist_newuser_ok2']			= "Your profile was created. You will be redirected to the main page";
@@ -20,6 +21,11 @@ $lang['dist_upduser_ok']			= "User data was updated";
 $lang['dist_upduser_nok']			= "There was an unexpected error updating user data";
 $lang['dist_upduser_email']			= "This email is already being used";
 
+$lang['dist_error_head']			= "An error was encountered";
+$lang['dist_error_mrkdel']			= "There was an error while deleting this marker";
+$lang['dist_mrkdel_confirm']		= "Are you sure you want to delete this Marker?";
+$lang['dist_mrkdel_ok']				= "The Marker was deleted";
+$lang['dist_error_upload']			= "There was an error while trying to upload";
 $lang['dist_general_error']			= "We had an unexpected error. We're working on it.";
 
 $lang['dist_errperm_marker']		= "You are not authorized to modify this Marker";

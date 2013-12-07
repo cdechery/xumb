@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; <?php echo $this->config->item('charset');?>">
+<meta http-equiv="Content-Type" content="text/html; <?php echo $this->config->item('charset');?>"/>
+<meta charset="<?php echo $this->config->item('charset');?>"/>
 <?php
 	if( !isset($title) ) {
 		echo "ERROR: Title not defined!";
@@ -25,7 +26,7 @@ body {
 	-webkit-border-radius:10px; border-radius:10px; 
 	-moz-box-sizing:content-box; 
 	-webkit-box-sizing:content-box; 
-	-khtml-box-sizing:content-box; box-sizing:content-box
+	-khtml-box-sizing:content-box; box-sizing:content-box;
 }
 
 #body_container {
@@ -44,16 +45,16 @@ body {
 	<div align="center">
 	<div class="corners" id="body_container" align="left">
 	<h2><a href="<?php echo base_url()?>">Xumb v0.6</a></h2>
-	<?php
+<?php
 		$user_name = "None";
 		$signup_link = " | <a href='".base_url()."login'>Login</a>";
 		$signup_link .= " | <a href='".base_url()."user/new_user'>Sign up</a>";
 
 
-		if( $login_data["logged_in"] ) {
+		if( isset($login_data) && $login_data["logged_in"] ) {
 			$user_name = "<a href='".base_url()."user/modify'>". $login_data["name"]."</a> ";
 			$user_name .= "[<a href='".base_url()."user/logout'>Logout</a>]";
 			$signup_link = "";
 		}
-	?>
+?>
 	<div align="right">User: <?php echo $user_name;?><?php echo $signup_link;?></div>

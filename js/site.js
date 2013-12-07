@@ -5,8 +5,28 @@ $.ajaxSetup({
 	}
 });
 
+jQuery.extend({
+    handleError: function( s, xhr, status, e ) {
+        // If a local callback was specified, fire it
+        if ( s.error )
+            s.error( xhr, status, e );
+        // If we have some XML response text (e.g. from an AJAX call) then log it in the console
+        else if(xhr.responseText)
+           console.log(xhr.responseText);
+    }
+})
+
+function countOcurrences(str, value){
+   var regExp = new RegExp(value, "gi");
+   return str.match(regExp) ? str.match(regExp).length : 0;  
+}
+
 function go_home() {
 	location.href=site_root;
+}
+
+function general_error() {
+	new Messi( lang['dist_general_error'], {title: 'Oops...', titleClass: 'anim error', buttons: [{id: 0, label: 'Fechar', val: 'X'}]});
 }
 
 function load_infowindow_content(infowindow, marker_id){
@@ -32,18 +52,14 @@ $(function() {
 	$('#update_marker').submit(function(e) {
 	e.preventDefault();
 	$.post($("#update_marker").attr("action"), $("#update_marker").serialize(), function(data) {
-		if( $.trim(data).indexOf('<')==0 ) {
-			new Messi( lang['dist_general_error'], {title: 'Ops...', titleClass: 'anim error', buttons: [{id: 0, label: 'Fechar', val: 'X'}]});
+		var json = $.parseJSON( data );
+		if( json.status=="success" ) {
+			new Messi( json.msg );
 		} else {
-			var json = $.parseJSON( data );
-			if( json.status=="success" ) {
-				new Messi( json.msg );
-			} else {
-				new Messi( json.msg, {title: 'Ops..', titleClass: 'anim error', buttons: [{id: 0, label: 'Fechar', val: 'X'}]});
-			}
+			new Messi( json.msg, {title: 'Ops..', titleClass: 'anim error', buttons: [{id: 0, label: 'Fechar', val: 'X'}]});
 		}
-	});
-	return false;
+		}).fail( general_error() );
+		return false;
 	});
 });
 
@@ -51,46 +67,38 @@ $(function() {
 	$('#user_insert').submit(function(e) {
 	e.preventDefault();
 	$.post($("#user_insert").attr("action"), $("#user_insert").serialize(), function(data) {
-		if( $.trim(data).indexOf('<')==0 ) {
-			new Messi( lang['dist_general_error'], {title: 'Ops...', titleClass: 'anim error', buttons: [{id: 0, label: 'Fechar', val: 'X'}]});
+		var json = $.parseJSON( data );
+		if( json.status=="OK" ) {
+			new Messi(lang['dist_newuser_ok2'], {title: lang['success'], titleClass: 'success', modal: true, buttons: [{id: 0, label: 'OK', val: 'S'}], callback: function(val) { go_home(); } });
 		} else {
-			var json = $.parseJSON( data );
-				if( json.status=="OK" ) {
-					new Messi(lang['dist_newuser_ok2'], {title: lang['success'], titleClass: 'success', modal: true, buttons: [{id: 0, label: 'OK', val: 'S'}], callback: function(val) { go_home(); } });
-				} else {
-					new Messi( json.msg, {title: 'Ops...', titleClass: 'anim error', buttons: [{id: 0, label: 'Fechar', val: 'X'}]});
-				}
-			}
-		});
+			new Messi( json.msg, {title: 'Ops...', titleClass: 'anim error', buttons: [{id: 0, label: 'Fechar', val: 'X'}]});
+		}
+		}).fail( general_error() );
 		return false;
-		});
+	});
 });
 
 $(function() {
 	$('#user_update').submit(function(e) {
 	e.preventDefault();
 	$.post($("#user_update").attr("action"), $("#user_update").serialize(), function(data) {
-		if( $.trim(data).indexOf('<')==0 ) {
-			new Messi( lang['dist_general_error'], {title: 'Ops...', titleClass: 'anim error', buttons: [{id: 0, label: 'Fechar', val: 'X'}]});
+		var json = $.parseJSON( data );
+		if( json.status=="OK" ) {
+			new Messi(json.msg, {title: lang['success'], titleClass: 'success', modal: true });
 		} else {
-			var json = $.parseJSON( data );
-				if( json.status=="OK" ) {
-					new Messi(json.msg, {title: lang['success'], titleClass: 'success', modal: true });
-				} else {
-					new Messi( json.msg, {title: 'Ops...', titleClass: 'anim error', buttons: [{id: 0, label: 'Fechar', val: 'X'}]});
-				}
-			}
-		});
+			new Messi( json.msg, {title: 'Ops...', titleClass: 'anim error', buttons: [{id: 0, label: 'Fechar', val: 'X'}]});
+		}
+		}).fail( general_error() );
 		return false;
-		});
+	});
 });
 
 $(function() {
 	$('#upload_avatar').submit(function(e) {
 		e.preventDefault();
 		$.ajaxFileUpload({
-			url         : site_root +'upload/upload_avatar/',
-			secureuri      :false,
+			url 		   : site_root +'upload/upload_avatar/',
+			secureuri      : false,
 			fileElementId  :'userfile',
 			contentType    : 'application/json; charset=utf-8',
 			dataType	   : 'json',
@@ -104,47 +112,59 @@ $(function() {
 				} else {
 					new Messi(data.msg, {title: lang['error'], tttleClass: 'anim error', buttons: [{id: 0, label: 'Fechar', val: 'X'}]});
 				}
+			},
+			error : function (data, status, e) {
+				new Messi( lang['dist_error_upload'], {title: 'Oops...', titleClass: 'anim error', buttons: [{id: 0, label: 'Fechar', val: 'X'}]});
 			}
 		});
 		return false;
 	});
 });
 
-var num_images = 0;
+var mrkImagesCount = 0;
+
 $(function() {
-	$('#upload_image').submit(function(e) {
-		e.preventDefault();
-		$.ajaxFileUpload({
-			url         : site_root +'upload/upload_image/',
-			secureuri      :false,
-			fileElementId  :'userfile',
-			contentType    : 'application/json; charset=utf-8',
-			dataType	: 'json',
-			data        : {
-				'title'           : $('#title').val(),
-				'thumbs'           : $('#thumbs').val(),
-				'marker_id'           : $('#marker_id').val()
-			},
-			success  : function (data) {
-				if( data.status != 'error') {
-					if( num_images === 0 ) {
-							$('#images').html('');
-						}
-						var imageData = $.get( site_root +'map/get_image/'+data.file_id );
-						imageData.success(function(data) {
-							$('#images').append(data);
-									num_images++;
-						});
-						$('#title').val('');
-						 
-					} else {
-						new Messi(data.msg, {title: lang['error'], tttleClass: 'anim error', buttons: [{id: 0, label: 'Fechar', val: 'X'}]});
-				}
-					
+    $('#upload_image').submit(function(e) {
+        e.preventDefault();
+
+        if( max_images_marker!=0 && mrkImagesCount>=max_images_marker ) {
+            new Messi(lang['dist_imgupload_max'], {title: lang['error'], tttleClass: 'anim error', buttons: [{id: 0, label: 'Fechar', val: 'X'}]});
+            return false;
+        } 
+
+        $.ajaxFileUpload({
+            url : site_root +'upload/upload_image/',
+            secureuri :false,
+            fileElementId :'userfile',
+            contentType : 'application/json; charset=utf-8',
+            dataType        : 'json',
+            data : {
+	            'title' : $('#title').val(),
+	            'thumbs' : $('#thumbs').val(),
+	            'marker_id' : $('#marker_id').val()
+            },
+            success : function (data) {
+                if( data.status != 'error') {
+                    if( mrkImagesCount === 0 ) {
+                        $('#images').html('');
+                    }
+
+	                var imageData = $.get( site_root +'map/get_image/'+data.file_id );
+	                imageData.success(function(data) {
+                        $('#images').append(data);
+                        mrkImagesCount++;
+	                });
+	                $('#title').val('');
+                } else {
+                    new Messi(data.msg, {title: lang['error'], tttleClass: 'anim error', buttons: [{id: 0, label: 'Fechar', val: 'X'}]});
+                }
+            },
+            error : function (data, status, e) {
+				new Messi( lang['dist_error_upload'], {title: 'Oops...', titleClass: 'anim error', buttons: [{id: 0, label: 'Fechar', val: 'X'}]});
 			}
-		});
-		return false;
-	});
+        });
+        return false;
+    });
 });
 
 function delete_image( link ) {
@@ -155,15 +175,20 @@ function delete_image( link ) {
 		success     : function (data) {
 			var images = $('#images');
 			if (data.status === "success") {
-					link.parent('div').fadeOut('fast', function() {
-						$(this).remove();
-						if (images.find('div').length === 0) {
-							images.html('<p>Sem imagens.</p>');
-						}
+				link.parent('div').fadeOut('fast', function() {
+					$(this).remove();
+					if (images.find('div').length === 0) {
+						images.html('<p>Sem imagens.</p>');
+					}
 				});
+				mrkImagesCount--;
 			} else {
+				alert(data);
 				new Messi(data.msg, {title: lang['error'], tttleClass: 'anim error', buttons: [{id: 0, label: 'Fechar', val: 'X'}]});
 			}
+		},
+		error : function (data, status, e) {
+			new Messi( lang['dist_imgdel_nok'], {title: 'Oops...', titleClass: 'anim error', buttons: [{id: 0, label: 'Fechar', val: 'X'}]});
 		}
 	});
 }
@@ -190,6 +215,8 @@ function delete_marker_map( link ) {
 			} else {
 				new Messi(data.msg, {title: lang['error'], tttleClass: 'anim error', buttons: [{id: 0, label: 'Fechar', val: 'X'}]});
 			}
+		}, error : function (data, status, e) {
+			new Messi( lang['dist_error_mrkdel'], {title: 'Oops...', titleClass: 'anim error', buttons: [{id: 0, label: 'Fechar', val: 'X'}]});
 		}
 	});
 }
@@ -198,8 +225,7 @@ $(function() {
 	$(document).on('click', '.delete_marker_link', function(e) {
 	e.preventDefault();
 	var link = $(this);
-	new Messi('Deseja apagar o Marcador? Todas as imagens serão excluídas também.', {modal: true, buttons: [{id: 0, label: 'Sim', val: 'S'}, {id: 1, label: 'Não', val: 'N'}], callback: function(val) { if(val=='S') delete_marker_map(link); }});
-	// TODO lang
+	new Messi(lang['dist_mrkdel_confirm'], {modal: true, buttons: [{id: 0, label: 'Sim', val: 'S'}, {id: 1, label: 'Não', val: 'N'}], callback: function(val) { if(val=='S') delete_marker_map(link); }});
 	return false;
 	}); // delete
 });
@@ -211,10 +237,13 @@ function delete_marker( btn ) {
 		dataType : 'json',
 		success : function (data) {
 			if (data.status === "success") {
-				new Messi('Marcador excluído com sucesso!', {title: lang['success'], titleClass: 'success', modal: true, buttons: [{id: 0, label: 'OK', val: 'S'}], callback: function(val) { go_home(); } });
+				new Messi( lang['dist_mrkdel_ok'], {title: lang['success'], titleClass: 'success', modal: true, buttons: [{id: 0, label: 'OK', val: 'S'}], callback: function(val) { go_home(); } });
 			} else {
 				new Messi(data.msg, {title: lang['error'], tttleClass: 'anim error', buttons: [{id: 0, label: 'Fechar', val: 'X'}]});
 			}
+		},
+		error : function (data, status, e) {
+			new Messi( lang['dist_error_mrkdel'], {title: 'Oops...', titleClass: 'anim error', buttons: [{id: 0, label: 'Fechar', val: 'X'}]});
 		}
 	});
 }
@@ -223,16 +252,15 @@ $(function() {
 	$(document).on('click', '.delete_marker_btn', function(e) {
 	e.preventDefault();
 	var btn = $(this);
-	new Messi('Deseja apagar o Marcador? Todas as imagens serão excluídas também.', {modal: true, buttons: [{id: 0, label: 'Sim', val: 'S'}, {id: 1, label: 'Não', val: 'N'}], callback: function(val) { if(val=='S') delete_marker(btn); }});
-	// TODO lang
+	new Messi( lang['dist_mrkdel_confirm'], {modal: true, buttons: [{id: 0, label: 'Sim', val: 'S'}, {id: 1, label: 'Não', val: 'N'}], callback: function(val) { if(val=='S') delete_marker(btn); }});
 	return false;
 	}); // delete
 });
 
 function refresh_marker_images( marker_id ) {
-	$.get(site_root + 'map/list_images/'+marker_id+'/200')
+	$.get(site_root + 'map/list_images/'+marker_id+'/150')
 		.success(function (data) {
-			if( data.indexOf('img')>0 ) { num_images=1; }
+			mrkImagesCount = countOcurrences( data, 'img' );
 			$('#images').html(data);
 	});
 }

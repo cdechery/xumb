@@ -13,7 +13,7 @@ class Map extends MY_Controller {
 
 	public function index() {
 		$this->load->library('googlemaps');
-		
+
 		$config = array();
 		$config['center'] = 'Rio de Janeiro'; // Center your Map at (city, country, address)
 		$config['zoom'] = '13';		
@@ -120,7 +120,7 @@ class Map extends MY_Controller {
 	}
 	
 	public function modify_marker( $id ) {
-		
+
 		if( !$this->check_owner( $this->map_model, $id ) ) {
 			show_error( xlang('dist_errperm_marker') );
 		}
@@ -138,6 +138,7 @@ class Map extends MY_Controller {
 
 		$this->load->library('form_validation');
 		$this->load->helper( array('form') );
+
 
 		$status = $msg = "";
 		if( !$this->is_user_logged_in ) {
@@ -186,7 +187,7 @@ class Map extends MY_Controller {
 				$data['name'] = $street_address['address']; 
 			} else {
 				$next_id = $this->map_model->get_next_marker_id( $this->logged_user_id );
-				$data['name'] = "Marcador ".$next_id;
+				$data['name'] = "Marker ".$next_id;
 			}
 		}
 		
@@ -215,7 +216,7 @@ class Map extends MY_Controller {
 			show_error( xlang('dist_errperm_marker') );
 		}
 
-		$status = "error"; $msg = "Erro geral"; //TODO lang
+		$status = "error"; $msg = xlang('dist_general_error');
 
 		// I had to leave this transction code here, because I didn't want
 		// a Model calling another Model's method

@@ -76,6 +76,7 @@ class Upload extends MY_Controller {
 	} // upload_imagem
 
 	public function upload_avatar() {
+
 		if( !$this->is_user_logged_in ) {
 			$status = "error";
 			$msg = xlang('dist_errsess_expire');
@@ -153,10 +154,10 @@ class Upload extends MY_Controller {
 		
 		if( !$this->image_model->delete( $id ) ) {
  			$status = 'error';
-      		$msg = xlang('dist_imgdel_ok');
+      		$msg = xlang('dist_imgdel_nok');
 		} else {
 			$status = "success";
-			$msg = xlang('dist_imgdel_nok');
+			$msg = xlang('dist_imgdel_ok');
 		}
 		$msg = utf8_encode( $msg );
 		echo json_encode( array('status' => $status, 'msg' => utf8_encode($msg)) );
