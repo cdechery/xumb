@@ -44,7 +44,7 @@ body {
 <body>
 	<div align="center">
 	<div class="corners" id="body_container" align="left">
-	<h2><a href="<?php echo base_url()?>">Xumb v0.6</a></h2>
+	<h2><a href="<?php echo base_url()?>">Xumb v0.7</a></h2>
 <?php
 		$user_name = "None";
 		$signup_link = " | <a href='".base_url()."login'>Login</a>";

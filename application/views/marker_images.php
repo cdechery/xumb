@@ -4,7 +4,7 @@
 ?>
 <?php
 		foreach ($files as $file) {
-			$thumb = thumb_filename($file->filename, 200);
+			$thumb = thumb_filename($file->filename, 150);
 ?>
 <div style="display: inline-block;" align="center">
 	<a class="fancybox" href="<?php echo base_url().$path.$file->filename; ?>" rel="galery1" title="<?php echo $file->description; ?>"><img src="<?php echo base_url().$path.$thumb; ?>"></a><br>

@@ -97,7 +97,7 @@ $(function() {
 	$('#upload_avatar').submit(function(e) {
 		e.preventDefault();
 		$.ajaxFileUpload({
-			url 		   : site_root +'upload/upload_avatar/',
+			url 		   : site_root +'image/upload_avatar/',
 			secureuri      : false,
 			fileElementId  :'userfile',
 			contentType    : 'application/json; charset=utf-8',
@@ -124,7 +124,7 @@ $(function() {
 var mrkImagesCount = 0;
 
 $(function() {
-    $('#upload_image').submit(function(e) {
+    $('#upload_marker_image').submit(function(e) {
         e.preventDefault();
 
         if( max_images_marker!=0 && mrkImagesCount>=max_images_marker ) {
@@ -133,7 +133,7 @@ $(function() {
         } 
 
         $.ajaxFileUpload({
-            url : site_root +'upload/upload_image/',
+            url : site_root +'image/upload_marker_image/',
             secureuri :false,
             fileElementId :'userfile',
             contentType : 'application/json; charset=utf-8',
@@ -149,7 +149,7 @@ $(function() {
                         $('#images').html('');
                     }
 
-	                var imageData = $.get( site_root +'map/get_image/'+data.file_id );
+	                var imageData = $.get( site_root +'image/get_image/'+data.file_id );
 	                imageData.success(function(data) {
                         $('#images').append(data);
                         mrkImagesCount++;
@@ -169,7 +169,7 @@ $(function() {
 
 function delete_image( link ) {
 	$.ajax({
-		url         : site_root + 'upload/delete_image/' + link.data('file_id'),
+		url         : site_root + 'image/delete_image/' + link.data('file_id'),
 		contentType    : 'charset=utf-8',
 		dataType : 'json',
 		success     : function (data) {
@@ -183,7 +183,6 @@ function delete_image( link ) {
 				});
 				mrkImagesCount--;
 			} else {
-				alert(data);
 				new Messi(data.msg, {title: lang['error'], tttleClass: 'anim error', buttons: [{id: 0, label: 'Fechar', val: 'X'}]});
 			}
 		},
@@ -258,7 +257,7 @@ $(function() {
 });
 
 function refresh_marker_images( marker_id ) {
-	$.get(site_root + 'map/list_images/'+marker_id+'/150')
+	$.get(site_root + 'image/list_marker_images/'+marker_id)
 		.success(function (data) {
 			mrkImagesCount = countOcurrences( data, 'img' );
 			$('#images').html(data);

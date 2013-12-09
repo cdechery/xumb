@@ -8,6 +8,16 @@
 
 $config['dist'] = array(
 	'site_title' => 'Xumb',
+	'googlemaps' => array(
+		'center' => 'Rio de Janeiro', // where to center your map
+		'zoom' => '13', // default zoom level
+		'geocodeCaching' => TRUE, // cache your locations in the database
+		'minifyJS' => TRUE, // minify the generated JS code
+		'places' => FALSE,
+		'cluster' => TRUE, // whether to cluster markers together
+		'clusterGridSize' => 40,
+		'sensor' => TRUE //whether to allow for detection of user's location 
+	),
 	'image_settings' => array(
 		'thumb_sizes' => array(80, 150), // size of thumbs to generate
 		'allowed_types' => array('jpeg', 'jpg', 'png'),

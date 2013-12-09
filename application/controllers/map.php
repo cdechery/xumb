@@ -15,13 +15,14 @@ class Map extends MY_Controller {
 		$this->load->library('googlemaps');
 
 		$config = array();
-		$config['center'] = 'Rio de Janeiro'; // Center your Map at (city, country, address)
-		$config['zoom'] = '13';		
-		$config['geocodeCaching'] = TRUE;
-		$config['minifyJS'] = TRUE;
-		$config['places'] = TRUE;
-		$config['cluster'] = TRUE;
-		$config['clusterGridSize'] = 40;
+		$config['center'] = $this->dist['googlemaps']['center'];
+		$config['zoom'] = $this->dist['googlemaps']['zoom'];	
+		$config['geocodeCaching'] = $this->dist['googlemaps']['geocodeCaching'];
+		$config['minifyJS'] = $this->dist['googlemaps']['minifyJS'];
+		$config['places'] = $this->dist['googlemaps']['places'];
+		$config['cluster'] = $this->dist['googlemaps']['cluster'];
+		$config['clusterGridSize'] = $this->dist['googlemaps']['clusterGridSize'];
+		$config['sensor'] = $this->dist['googlemaps']['sensor'];
 		
 		$custom_js_global = "";
 		$custom_js_init = "";
@@ -84,7 +85,7 @@ class Map extends MY_Controller {
 
 	public function marker_infowindow($marker_id) {
 		$data = $this->map_model->get_marker( $marker_id );
-		$images = $this->image_model->get_images($marker_id);
+		$images = $this->image_model->get_marker_images($marker_id);
 		$data['images'] = $images;
 		if( $this->dist['use_categories'] ) {
 			$data['category'] = $this->map_model->get_category( $data['category_id'] );
@@ -220,7 +221,7 @@ class Map extends MY_Controller {
 
 		// I had to leave this transction code here, because I didn't want
 		// a Model calling another Model's method
-		$images = $this->image_model->get_images( $marker_id );
+		$images = $this->image_model->get_marker_images( $marker_id );
 
 		$this->db->trans_begin();
 
@@ -238,17 +239,5 @@ class Map extends MY_Controller {
 		}
 
 		echo json_encode( array('status'=>$status, 'msg'=>utf8_encode($msg)) );
-	}
-	
-	public function list_images($marker_id) {
-		$this->load->helper('image_helper');
-		$files = $this->image_model->get_images($marker_id);
-		$this->load->view('marker_images', array('files' => $files));
-	}
-	
-	public function get_image($image_id) {
-		$image_data = $this->image_model->get_by_id($image_id);
-		//print_r($image_data);
-		$this->load->view("marker_image_single", array("image"=>$image_data));
 	}
 }

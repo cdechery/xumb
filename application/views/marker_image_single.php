@@ -1,5 +1,5 @@
 <?php
-	$thumb = thumb_filename($image->filename, "200");
+	$thumb = thumb_filename($image->filename, "150");
 	$path = $dist['upload']['path'];
 ?>
 <div style="display: inline-block;" align="center">

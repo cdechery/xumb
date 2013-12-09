@@ -21,10 +21,10 @@
 </form>
 	   
 	   <h5>Upload Image</h5>
-	   <form method="post" action="<?php echo base_url()?>upload/upload_image"
-	   		id="upload_image" enctype="multipart/form-data" onSubmit="clearInlineLabels(this)";>
+	   <form method="post" action="<?php echo base_url()?>image/upload_marker_image"
+	   		id="upload_marker_image" enctype="multipart/form-data" onSubmit="clearInlineLabels(this)";>
 		<input type="hidden" name="marker_id" id="marker_id" value="<?php echo $id; ?>">
-	    <input type="hidden" name="thumbs" id="thumbs" value="100|200"/>
+	    <input type="hidden" name="thumbs" id="thumbs" value="<?php echo implode('|',$dist['image_settings']['thumb_sizes'])?>"/>
 	      <input type="text" name="title" id="title" value="" title="Name is optional"/><br>
 	      <input type="file" name="userfile" id="userfile" size="20" title="File"/><br>
 	 

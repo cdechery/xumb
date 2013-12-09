@@ -1,17 +1,13 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Upload extends MY_Controller { 
+class Image extends MY_Controller { 
 	
 	public function __construct() {
 		parent::__construct();
 		$this->load->model('image_model');
 	}
 
-	public function index() {
-		$this->load->view('upload_view');
-	}
-
-	public function upload_image() {
+	public function upload_marker_image() {
 		$status = "";
 		$msg = "";
 		$file_id = "";
@@ -73,7 +69,7 @@ class Upload extends MY_Controller {
 
 		$msg = utf8_encode($msg);
 		echo json_encode(array('status' => $status, 'msg' => $msg, "file_id" => $file_id) );
-	} // upload_imagem
+	} // upload_marker_imagem
 
 	public function upload_avatar() {
 
@@ -135,13 +131,14 @@ class Upload extends MY_Controller {
 
 		$msg = utf8_encode($msg);
 		echo json_encode(array('status' => $status, 'msg' => $msg, "img_src" => $img_src) );
-	} // upload_imagem
+	} // upload_marker_imagem
 
-	public function list_images($marker_id, $thumb_size = 0) {
-		$files = $this->image_model->get_files($marker_id, $thumb_size);
-		$this->load->view('imagens', array('files' => $files));
+	public function list_marker_images( $marker_id ) {
+		//$this->load->helper('image_helper');
+		$files = $this->image_model->get_marker_images($marker_id);
+		$this->load->view('marker_images', array('files' => $files));
 	}
-	
+
 	public function delete_image( $id ) {
 		if( !$this->is_user_logged_in ) {
 			$status = "error";
@@ -162,4 +159,10 @@ class Upload extends MY_Controller {
 		$msg = utf8_encode( $msg );
 		echo json_encode( array('status' => $status, 'msg' => utf8_encode($msg)) );
 	}
-} // Upload class
+
+	public function get_image($image_id) {
+		$image_data = $this->image_model->get_by_id($image_id);
+		$this->load->view("marker_image_single", array("image"=>$image_data));
+	}
+
+} // Image class

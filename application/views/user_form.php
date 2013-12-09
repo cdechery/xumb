@@ -28,9 +28,9 @@
 <?php
 	if( $action=="update" ) {
 ?>
-	    <form method="post" action="<?php echo base_url();?>upload/upload_avatar" id="upload_avatar" enctype="multipart/form-data">
+	    <form method="post" action="<?php echo base_url();?>image/upload_avatar" id="upload_avatar" enctype="multipart/form-data">
 		<input type="hidden" name="user_id" id="user_id" value="<?php echo $id; ?>">
-	    <input type="hidden" name="thumbs" id="thumbs" value="100|200"/>
+	    <input type="hidden" name="thumbs" id="thumbs" value="<?php echo implode('|',$dist['image_settings']['thumb_sizes'])?>"/>
 		<input type="file" id="userfile" name="userfile" style="display: none;" />
 		<input type="button" value="Browse ..." onclick="document.getElementById('userfile').click();" />
 

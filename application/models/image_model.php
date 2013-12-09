@@ -37,7 +37,7 @@ class Image_model extends MY_Model {
 		}
 	}
 	
-	public function get_images($marker_id) {
+	public function get_marker_images( $marker_id ) {
 		$images =  $this->db->get_where('image', array('marker_id'=>$marker_id))->result();
 		return $images;
 	}
