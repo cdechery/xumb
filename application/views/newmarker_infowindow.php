@@ -1,5 +1,5 @@
 <div style="width: 250px; text-align: left;">
-	<form name="newMark" id="newMark" method=post action="<?php echo base_url();?>map/new_marker" onSubmit="clearInlineLabels();">
+	<form name="new_marker" id="new_marker" method="post" action="<?php echo base_url();?>map/new_marker" onSubmit="clearInlineLabels();">
 	<input type=hidden name=latitude value="<?php echo $lat;?>"><input type=hidden name=longitude value="<?php echo $long;?>">
 	Create a new marker here?
 	<input id="input_text" type="text" id="name" name="name" value="" size="20" title="Name is optional"/><br>

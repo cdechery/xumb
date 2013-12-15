@@ -50,7 +50,7 @@ function general_error( msg ) {
 function load_infowindow_content(infowindow, marker_id){
 		$.ajax({
 		url: site_root +'map/marker_infowindow/' + marker_id,
-		success: function(data){
+		success: function(data) {
 			infowindow.setContent(data);
 		}
 	});
@@ -60,11 +60,32 @@ function newmarker_infowindow_content(lat, long, infowindow) {
 		$.ajax({
 		url: site_root +'map/newmarker_infowindow/' + lat +'/' +long,
 		success: function(data){
-		infowindow.setContent(data);
+			infowindow.setContent(data);
 			processInLineLabels();
 		}
 	});
 }
+
+// TODO lang
+$(function() {
+	$('#map_canvas').on('submit', '#new_marker', function( e ) {
+	e.preventDefault();
+	$.post($("#new_marker").attr("action"), $("#new_marker").serialize(), function(data) {
+		var json = myParseJSON( data );
+		if( json.status=="success" ) {
+			new Messi('Novo Marcador foi incluído!', 
+				{title: 'Sucesso', titleClass: 'info', modal: true, buttons: [{id: 0, label: 'Prosseguir', val: 'X'}],
+				callback: function() {
+					location.href = site_root+'map/modify_marker/'+json.marker_id;
+				}
+			});
+		} else {
+			new Messi( json.msg, {title: 'Oops...', titleClass: 'anim error', buttons: [{id: 0, label: 'Fechar', val: 'X'}]} );
+		}
+	}).fail( function() { general_error(); } );
+	return false;
+	})
+});
 
 $(function() {
 	$('#update_marker').submit(function(e) {
@@ -214,7 +235,7 @@ $(function() {
 	$(document).on('click', '.delete_file_link', function(e) {
 	e.preventDefault();
 	var link = $(this);
-	new Messi(lang['dist_imgdel_confirm'], {modal: true, buttons: [{id: 0, label: 'Sim', val: 'S'}, {id: 1, label: 'NÃ£o', val: 'N'}], callback: function(val) { if(val=='S') delete_image(link); }});
+	new Messi(lang['dist_imgdel_confirm'], {modal: true, buttons: [{id: 0, label: 'Sim', val: 'S'}, {id: 1, label: 'Não', val: 'N'}], callback: function(val) { if(val=='S') delete_image(link); }});
 
 	return false;
 	}); // delete
@@ -242,7 +263,7 @@ $(function() {
 	$(document).on('click', '.delete_marker_link', function(e) {
 	e.preventDefault();
 	var link = $(this);
-	new Messi(lang['dist_mrkdel_confirm'], {modal: true, buttons: [{id: 0, label: 'Sim', val: 'S'}, {id: 1, label: 'NÃ£o', val: 'N'}], callback: function(val) { if(val=='S') delete_marker_map(link); }});
+	new Messi(lang['dist_mrkdel_confirm'], {modal: true, buttons: [{id: 0, label: 'Sim', val: 'S'}, {id: 1, label: 'Não', val: 'N'}], callback: function(val) { if(val=='S') delete_marker_map(link); }});
 	return false;
 	}); // delete
 });
@@ -269,7 +290,7 @@ $(function() {
 	$(document).on('click', '.delete_marker_btn', function(e) {
 	e.preventDefault();
 	var btn = $(this);
-	new Messi( lang['dist_mrkdel_confirm'], {modal: true, buttons: [{id: 0, label: 'Sim', val: 'S'}, {id: 1, label: 'NÃ£o', val: 'N'}], callback: function(val) { if(val=='S') delete_marker(btn); }});
+	new Messi( lang['dist_mrkdel_confirm'], {modal: true, buttons: [{id: 0, label: 'Sim', val: 'S'}, {id: 1, label: 'Não', val: 'N'}], callback: function(val) { if(val=='S') delete_marker(btn); }});
 	return false;
 	}); // delete
 });

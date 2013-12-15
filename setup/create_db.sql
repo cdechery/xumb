@@ -77,6 +77,7 @@ CREATE  TABLE IF NOT EXISTS `xumb`.`marker` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+alter table `xumb.marker` add unique index `lat_lng_unqidx` (`latitude`, `longitude`);
 
 -- -----------------------------------------------------
 -- Table `xumb`.`comment`

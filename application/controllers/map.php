@@ -169,8 +169,12 @@ class Map extends MY_Controller {
 	}
 	
 	public function new_marker() {
+		$status = "error"; $msg = xlang('dist_general_error');
+		$marker_id = 0;
+
 		if( !$this->is_user_logged_in ) {
-			show_error( xlang('dist_errsess_expire') );
+			$msg = xlang('dist_errsess_expire');
+			echo json_encode( array('status' => "error", 'msg' => utf8_encode($msg)) );
 			return;
 		}
 
@@ -196,19 +200,26 @@ class Map extends MY_Controller {
 		$new_marker_id = $this->map_model->insert_marker( $data );
 		
 		if( $new_marker_id ) {
-			//$data['id'] = $new_marker_id;
-			//$data['description'] = "";
+			$status = "success";
+			$msg = "New marker was created";
+			$marker_id = $new_marker_id;
 
-			/*$head_data = array("min_template"=>"image_upload", "title"=>$this->dist['site_title'].": Marcador");
+			/*$data['id'] = $new_marker_id;
+			$data['description'] = "";
+
+			$head_data = array("min_template"=>"image_upload", "title"=>$this->dist['site_title'].": Marcador");
 			$this->load->view('head', $head_data);
 				
 			$this->load->view('marker_form', array('data' => $data) );
 			$this->load->view('foot');*/
 
-			redirect('/map/modify_marker/'.$new_marker_id);
+			//redirect('/map/modify_marker/'.$new_marker_id);
 		} else {
-			show_error('dist_general_error');
+			$status = "error";
+			$msg = xlang('dist_general_error');
 		}
+
+		echo json_encode( array('status' => $status, 'msg' => utf8_encode($msg), 'marker_id'=>$marker_id) );
 	}	
 
 	public function delete_marker( $marker_id ) {
