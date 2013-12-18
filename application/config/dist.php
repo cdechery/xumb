@@ -8,6 +8,10 @@
 
 $config['dist'] = array(
 	'site_title' => 'Xumb',
+	'update_tool' => array(
+		'password' => '###changethis###',
+		'skip_files' => ''
+	),
 	'googlemaps' => array(
 		'center' => 'Rio de Janeiro', // where to center your map
 		'zoom' => '13', // default zoom level
