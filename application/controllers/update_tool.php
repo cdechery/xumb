@@ -58,6 +58,9 @@
 				return;
 			}
 
+			$delete = $this->input->post('delete');
+			$delete = ($delete=="1");
+
 			$dist = $this->config->item('dist');
 			$base = dirname($_SERVER['SCRIPT_FILENAME']);
 			$full_path = $base."/update/master.zip";
@@ -69,12 +72,25 @@
 
 			array_walk($this->base_skip_files, 'prefix', $base);
 
+			$master_file_ok = FALSE;
+
 			$output = "Checking for master file existence: ";
-			if( !@fopen($full_path, "r") ) {
-				$output .= "File <i>master.zip</i> not found on update dir.";
+			if( FALSE!=@fopen($full_path, "r") ) {
+				$output .="OK - skipping download<br>";
+				$master_file_ok = TRUE;
 			} else {
-				$output .= "OK<br>";
+				$output .= "File <i>master.zip</i> not found on update dir.<br>Trying to download from github: ";
+				if( FALSE!=download_from_github($base) ) {
+					$output .="OK<br>";
+					$master_file_ok = TRUE;
+				} else {
+					$output .="Unable to download. Try downloading manually or check your log files<br>";
+				}
+			}
+
+			if( $master_file_ok ) {
 				$output .= "Unzipping master file: ";
+
 				$zip = new ZipArchive;
 				$res = $zip->open( $full_path );
 				if ($res === TRUE) {
@@ -101,10 +117,19 @@
 						$output .= "No changes. You're good!";
 					}
 
+					if( $delete ) {
+						$output .="<br>Deleting files on the update folder: ";
+						@unlink( $base."/update/master.zip");
+						@delTree($base."/update/xumb-master");
+						$output .="OK";
+					}
+
 					$output .= "<br><br><b>Update finished!</b>";
 				} else {
 					$output .= "There was a failure unzipping, check your log files";
 				}
+			} else { // master_file_ok
+				$output .= "<br><b>Update aborted!</b>";
 			}
 
 			$this->load->view('update_tool', array('step'=>'do_update', 'output'=>$output) );
@@ -134,4 +159,25 @@
 	function prefix(&$file, $key, $prefix) {
 		$file = $prefix.$file;
 	}
+
+	function download_from_github($dest_dir) {
+		$ret = FALSE;
+		$master = "http://github.com/cdechery/xumb/archive/master.zip";
+		$remote_data = @file_get_contents( $master );
+		if( $remote_data==FALSE ) {
+			return FALSE;
+		} else {
+			$ret = @file_put_contents( $dest_dir."/update/master.zip", $remote_data);
+		}
+
+		return ( $ret!=FALSE );
+	}
+
+	function delTree($dir) { 
+		$files = array_diff(scandir($dir), array('.','..')); 
+		foreach ($files as $file) { 
+			(is_dir("$dir/$file")) ? delTree("$dir/$file") : unlink("$dir/$file"); 
+		} 
+		return rmdir($dir); 
+	} 	
 ?>
