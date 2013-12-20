@@ -13,6 +13,9 @@
 		public function __construct() {
 			parent::__construct();
 			$this->dist = $this->config->item('dist');
+			if( "###changethis###"==$this->dist['update_tool']['password'] ) {
+				die('The Update Tool will not work until you configure your distribution correctly.');
+			}
 		}
 
 		public function index($msg = NULL) {
