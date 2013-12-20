@@ -9,7 +9,7 @@
 $config['dist'] = array(
 	'site_title' => 'Xumb',
 	'update_tool' => array(
-		'password' => '###changethis###',
+		'password' => '###changethis###', // if you don't change this, the Update Tool will not work
 		'skip_files' => ''
 	),
 	'googlemaps' => array(
