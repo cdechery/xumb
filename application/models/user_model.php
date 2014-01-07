@@ -26,10 +26,10 @@ class User_model extends MY_Model {
 		}
 	}
 
-	public function email_exists($email, $except_user_id) {
+	public function email_exists($email, $except_user_id = 0) {
 		$query = $this->db->get_where('user', array('email'=> $email, 'id !=' => $except_user_id ) );
 
-		return $query->num_rows()>0;
+		return $query->num_rows() > 0;
 	}
 
 	public function insert($user_data) {
@@ -76,6 +76,15 @@ class User_model extends MY_Model {
 		return( $this->db->update('user', $upd_data, array('id' => $user_id)) );
 	}
 
+	public function update_password($email, $new_pwd) {
+		if( empty($email) || empty($new_pwd) ) {
+			return false;
+		}
+
+		$upd_data = array( 'password'=>md5($new_pwd) );
+		return( $this->db->update('user', $upd_data, array('email' => $email)) );
+	}
+
 	public function update_avatar($img_data, $user_id, $thumb_sizes = array() ) {
 		if( empty($img_data) || $user_id==0 ) {
 			return false;
@@ -101,14 +110,17 @@ class User_model extends MY_Model {
 	}
 
 	public function delete_graceful($user_id) {
+		// TODO
 		return 0;
 	}
 
 	public function delete_cascade($user_id) {
+		// TODO
 		return 0;
 	}
 
 	public function get_users($active_only = TRUE) {
+		// TODO
 		return 0;
 	}
 }
