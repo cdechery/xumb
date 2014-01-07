@@ -86,6 +86,59 @@ class User extends MY_Controller {
 		$this->load->view('foot');
 	}
 
+	public function reset_password() {
+		$action = $this->input->post('action', TRUE);
+		$msg = ""; $status = "form";
+
+		if( empty($action) ) {
+			$action = "do_reset";
+			$msg = "Please provide your email"; //TODO lang
+		} else {
+			$email = $this->input->post('email', TRUE);
+
+			if( !$this->user_model->email_exists($email) ) {
+				$action = "form";
+				$status = "error";
+				$msg = "Sorry, we can't find this email";
+			} else {
+				// let's generate a new password
+				// not a very tricky one, but feel free to improve this
+				$pwd_len = "8";
+				$letters = "abcdefghijklmnopqrstuvwxyz";
+				$numbers = "1234567890";
+
+				$letters_len = strlen($letters);
+				$numbers_len = strlen($numbers);
+
+				$new_pwd = "";
+				for($i=0; $i<$pwd_len-1; $i++) {
+					if( $i%2==0 ) {
+						$idx = rand(0,$letters_len-1);
+						$new_pwd .= $letters[$idx];
+					} else {
+						$idx = rand(0,$numbers_len-1);
+						$new_pwd .= $numbers[$idx];
+					}
+				}
+
+				if( $this->user_model->update_password($email, $new_pwd) ) {
+					$status = "success";
+					$msg = "A new password was sent to your email!";
+					$action = "success";
+
+					$this->send_pwd_email($email, $new_pwd);
+				} else {
+					$status = "error";
+					$msg = "There was an error reseting the password";
+					$action = "form";
+				}
+			}
+		}
+
+		$view_params = array('action'=>$action, 'msg'=>$msg, 'status'=>$status);
+		$this->load->view('reset_password', $view_params);
+	}
+
 	public function update() {
 		$status = "";
 		$msg = "";
@@ -105,7 +158,7 @@ class User extends MY_Controller {
 			$this->form_validation->set_rules('surname', 'Sobrenome', 'required|min_length[5]|max_length[50]');
 			$this->form_validation->set_rules('email', 'Email', 'required|valid_email|callback_email_check');
 			$this->form_validation->set_rules('password', 'Senha', '');
-			$this->form_validation->set_rules('password_2', 'Confirmação de Senha', 'matches[password]');
+			$this->form_validation->set_rules('password_2', 'ConfirmaÃ§Ã£o de Senha', 'matches[password]');
 			$this->form_validation->set_rules('zipcode', 'CEP', 'numeric');
 
 			if ($this->form_validation->run() == FALSE) {
@@ -127,7 +180,7 @@ class User extends MY_Controller {
 		echo json_encode( array('status'=>$status, 'msg'=>utf8_encode($msg)) );
 	}
 
-	public function email_check($email) {
+	public function email_check( $email ) {
 		if( $this->user_model->email_exists($email, $this->login_data['user_id']) ) {
 			$this->form_validation->set_message('email_check', xlang('dist_upduser_email') );
 			return FALSE;
@@ -135,6 +188,23 @@ class User extends MY_Controller {
 			return TRUE;
 		}
 	}
-}
 
+	private function send_pwd_email($email, $password) {
+		$this->load->library('email');
+
+		$this->email->from($this->dist['email']['from'], $this->dist['email']['name']);
+		$this->email->to( $email ); 
+
+		$this->email->subject('Your New Password');
+		$message = 'This is your new password to access the '.$this->dist['site_title'].' website.\n
+					\nPassword: '.$password.'
+					\n\nWe suggest you login right now, change your password and 
+					then delete this email. You can always use this feature later in
+					the future in case you forget it again. ;)';
+
+		$this->email->message( $message );	
+
+		$this->email->send();		
+	}
+}
 ?>
