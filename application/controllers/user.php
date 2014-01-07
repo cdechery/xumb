@@ -196,9 +196,11 @@ class User extends MY_Controller {
 		$this->email->to( $email ); 
 
 		$this->email->subject('Your New Password');
-		$message = 'This is your new password to access the '.$this->dist['site_title'].' website.\n
-					\nPassword: '.$password.'
-					\n\nWe suggest you login right now, change your password and 
+		$message = 'You requested a password reset at the '.$this->dist['site_title'].' website.
+
+					Here it is: '.$password.'
+					
+					We suggest you login right now, change your password and 
 					then delete this email. You can always use this feature later in
 					the future in case you forget it again. ;)';
 
