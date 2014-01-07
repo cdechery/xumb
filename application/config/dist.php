@@ -8,6 +8,7 @@
 
 $config['dist'] = array(
 	'site_title' => 'Xumb',
+	'email' => array('from'=>'webmaster@somesite.org', 'name'=>'Your Name'),
 	'update_tool' => array(
 		'password' => '###changethis###', // if you don't change this, the Update Tool will not work
 		'skip_files' => ''
