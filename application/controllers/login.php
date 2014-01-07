@@ -7,7 +7,7 @@ class Login extends MY_Controller {
 	}
 
 	public function index($msg = "") {
-		$head_data = array("title"=>$this->dist['site_title'].": Login");
+		$head_data = array("min_template"=>"image_view", "title"=>$this->dist['site_title'].": Login");
 		$this->load->view('head', $head_data);
 		$this->load->view('login', array('msg'=>$msg));
 		$this->load->view('foot');
