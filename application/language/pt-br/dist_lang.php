@@ -21,9 +21,16 @@ $lang['dist_upduser_ok']			= "Usuário atualizado com sucesso";
 $lang['dist_upduser_nok']			= "Ocorreu um erro inesperado ao atualizar o usuário";
 $lang['dist_upduser_email']			= "O email selecionado já está em uso";
 
+$lang['dist_resetpw_link']			= "Esqueceu sua senha?";
+$lang['dist_resetpw_email']			= "Por favor, informe seu email";
+$lang['dist_resetpw_email_nok']		= "Não consegui encontrar esse email";
+$lang['dist_resetpw_email_ok']		= "Uma nova senha foi enviada ao seu email!";
+$lang['dist_resetpw_email_err']		= "Ocorreu um erro ao resetar a senha";
+
 $lang['dist_error_head']			= "Ocorreu um erro";
 $lang['dist_error_upload']			= "Não foi possível realizar o upload";
 $lang['dist_mrkdel_confirm']		= "Tem certeza que deseja apagar este Marcador?";
+$lang['dist_marker_insertok']		= "Novo Marcador foi incluído!";
 $lang['dist_mrkdel_ok']				= "Marcador excluído com sucesso";
 $lang['dist_error_mrkdel']			= "Ocorreu um erro ao excluir esse marcador";
 $lang['dist_general_error']			= "Tivemos um erro inesperado. Estamos trabalhando para reparar, volte mais tarde.";
@@ -37,6 +44,12 @@ $lang['dist_lbl_insert']			= "Incluir";
 $lang['dist_lbl_update']			= "Atualizar";
 $lang['dist_lbl_send']				= "Enviar";
 $lang['dist_lbl_upload']			= "Enviar";
+$lang['dist_lbl_close']				= "Fechar";
+$lang['dist_lbl_proceed']			= "Prosseguir";
+
+$lang['dist_lbl_user']				= "Usuário";
+$lang['dist_lbl_others']			= "Outros";
+$lang['dist_lbl_all']				= "Todos";
 
 $lang['dist_lbl_name']				= "Nome";
 $lang['dist_lbl_description']		= "Descrição";

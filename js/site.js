@@ -14,13 +14,15 @@ jQuery.extend({
         else if(xhr.responseText)
            console.log(xhr.responseText);
     }
-})
+});
 
 function setErrorDiv( errorData ) {
 	$('#error-details').html( errorData );
 }
 
-var nonJSONret = $.parseJSON( '{ "status": "nonJSONreturn", "msg": "'+lang['dist_general_error']+'" }' );
+var nonJSONret = $.parseJSON( '{ "status": "nonJSONreturn", '
+	+'"msg": "'+lang['dist_general_error']+'" }' );
+
 function myParseJSON( jsonString ) {
 	try {
 		var json = $.parseJSON( jsonString );
@@ -44,7 +46,8 @@ function general_error( msg ) {
 	if( msg==null ) {
 		msg = lang['dist_general_error'];
 	}
-	new Messi( msg, {title: 'Oops...', titleClass: 'anim error', buttons: [{id: 0, label: 'Fechar', val: 'X'}]});
+	new Messi( msg, {title: 'Oops...', titleClass: 'anim error', 
+		buttons: [{id: 0, label: 'Fechar', val: 'X'}]});
 }
 
 function load_infowindow_content(infowindow, marker_id){
@@ -56,9 +59,9 @@ function load_infowindow_content(infowindow, marker_id){
 	});
 }
 
-function newmarker_infowindow_content(lat, long, infowindow) {
+function newmarker_infowindow_content(lat, lng, infowindow) {
 		$.ajax({
-		url: site_root +'map/newmarker_infowindow/' + lat +'/' +long,
+		url: site_root +'map/newmarker_infowindow/' + lat +'/' +lng,
 		success: function(data){
 			infowindow.setContent(data);
 			processInLineLabels();
@@ -66,21 +69,22 @@ function newmarker_infowindow_content(lat, long, infowindow) {
 	});
 }
 
-// TODO lang
 $(function() {
 	$('#map_canvas').on('submit', '#new_marker', function( e ) {
 	e.preventDefault();
 	$.post($("#new_marker").attr("action"), $("#new_marker").serialize(), function(data) {
 		var json = myParseJSON( data );
 		if( json.status=="success" ) {
-			new Messi('Novo Marcador foi incluído!', 
-				{title: 'Sucesso', titleClass: 'info', modal: true, buttons: [{id: 0, label: 'Prosseguir', val: 'X'}],
+			new Messi( lang['dist_marker_insertok'], 
+				{title: lang['dist_lbl_success'], titleClass: 'info', modal: true, 
+					buttons: [{id: 0, label: lang['dist_lbl_proceed'], val: 'X'}],
 				callback: function() {
 					location.href = site_root+'map/modify_marker/'+json.marker_id;
 				}
 			});
 		} else {
-			new Messi( json.msg, {title: 'Oops...', titleClass: 'anim error', buttons: [{id: 0, label: 'Fechar', val: 'X'}]} );
+			new Messi( json.msg, {title: 'Oops...', titleClass: 'anim error', 
+				buttons: [{id: 0, label: lang['dist_lbl_close'], val: 'X'}]} );
 		}
 	}).fail( function() { general_error(); } );
 	return false;
@@ -95,7 +99,8 @@ $(function() {
 			if( json.status=="success" ) {
 				new Messi( json.msg );
 			} else {
-				new Messi( json.msg, {title: 'Oops...', titleClass: 'anim error', buttons: [{id: 0, label: 'Fechar', val: 'X'}]});
+				new Messi( json.msg, {title: 'Oops...', titleClass: 'anim error',
+					buttons: [{id: 0, label: 'Fechar', val: 'X'}]});
 			}
 		}).fail( function() { general_error(); } );
 		return false;
@@ -108,9 +113,12 @@ $(function() {
 		$.post($("#user_insert").attr("action"), $("#user_insert").serialize(), function(data) {
 			var json = myParseJSON( data );
 			if( json.status=="OK" ) {
-				new Messi(lang['dist_newuser_ok2'], {title: lang['success'], titleClass: 'success', modal: true, buttons: [{id: 0, label: 'OK', val: 'S'}], callback: function(val) { go_home(); } });
+				new Messi(lang['dist_newuser_ok2'], {title: lang['success'], 
+					titleClass: 'success', modal: true, buttons: [{id: 0, label: 'OK', val: 'S'}], 
+					callback: function(val) { go_home(); } });
 			} else {
-				new Messi( json.msg, {title: 'Ops...', titleClass: 'anim error', buttons: [{id: 0, label: 'Fechar', val: 'X'}]});
+				new Messi( json.msg, {title: 'Ops...', titleClass: 'anim error', 
+					buttons: [{id: 0, label: 'Fechar', val: 'X'}]});
 			}
 		}).fail( function() { general_error(); } );
 		return false;
@@ -125,7 +133,8 @@ $(function() {
 			if( json.status=="OK" ) {
 				new Messi(json.msg, {title: lang['success'], titleClass: 'success', modal: true });
 			} else {
-				new Messi( json.msg, {title: 'Oops...', titleClass: 'anim error', buttons: [{id: 0, label: 'Fechar', val: 'X'}]});
+				new Messi( json.msg, {title: 'Oops...', titleClass: 'anim error', 
+					buttons: [{id: 0, label: 'Fechar', val: 'X'}]});
 			}
 		}).fail( function() { general_error(); } );
 		return false;
@@ -147,9 +156,11 @@ $(function() {
 			success  : function (data) {
 				if( data.status != 'error') {
 					$('#user_avatar').attr('src',data.img_src);
-					new Messi(data.msg, {title: lang['success'], titleClass: 'success', modal: true });
+					new Messi(data.msg, {title: lang['success'], 
+						titleClass: 'success', modal: true });
 				} else {
-					new Messi(data.msg, {title: lang['error'], tttleClass: 'anim error', buttons: [{id: 0, label: 'Fechar', val: 'X'}]});
+					new Messi(data.msg, {title: lang['error'], tttleClass: 'anim error',
+						buttons: [{id: 0, label: 'Fechar', val: 'X'}]});
 				}
 			},
 			error : function (data, status, e) {
@@ -167,7 +178,8 @@ $(function() {
         e.preventDefault();
 
         if( max_images_marker!=0 && mrkImagesCount>=max_images_marker ) {
-            new Messi(lang['dist_imgupload_max'], {title: lang['error'], tttleClass: 'anim error', buttons: [{id: 0, label: 'Fechar', val: 'X'}]});
+            new Messi(lang['dist_imgupload_max'], {title: lang['error'], tttleClass: 'anim error', 
+            	buttons: [{id: 0, label: 'Fechar', val: 'X'}]});
             return false;
         } 
 
@@ -195,7 +207,8 @@ $(function() {
 	                });
 	                $('#title').val('');
                 } else {
-                    new Messi(data.msg, {title: lang['error'], tttleClass: 'anim error', buttons: [{id: 0, label: 'Fechar', val: 'X'}]});
+                    new Messi(data.msg, {title: lang['error'], tttleClass: 'anim error', 
+                    	buttons: [{id: 0, label: 'Fechar', val: 'X'}]});
                 }
             },
             error : function (data, status, e) {
@@ -222,7 +235,8 @@ function delete_image( link ) {
 				});
 				mrkImagesCount--;
 			} else {
-				new Messi(data.msg, {title: lang['error'], tttleClass: 'anim error', buttons: [{id: 0, label: 'Fechar', val: 'X'}]});
+				new Messi(data.msg, {title: lang['error'], tttleClass: 'anim error', 
+					buttons: [{id: 0, label: 'Fechar', val: 'X'}]});
 			}
 		},
 		error : function (data, status, e) {
@@ -235,7 +249,9 @@ $(function() {
 	$(document).on('click', '.delete_file_link', function(e) {
 	e.preventDefault();
 	var link = $(this);
-	new Messi(lang['dist_imgdel_confirm'], {modal: true, buttons: [{id: 0, label: 'Sim', val: 'S'}, {id: 1, label: 'Não', val: 'N'}], callback: function(val) { if(val=='S') delete_image(link); }});
+	new Messi(lang['dist_imgdel_confirm'], {modal: true, buttons: [{id: 0, label: 'Sim', val: 'S'},
+		{id: 1, label: 'Não', val: 'N'}], 
+		callback: function(val) { if(val=='S') delete_image(link); }});
 
 	return false;
 	}); // delete
@@ -251,7 +267,8 @@ function delete_marker_map( link ) {
 				var markerVar = eval('marker_'+link.data('marker_id'));
 				markerVar.setMap(null);
 			} else {
-				new Messi(data.msg, {title: lang['error'], tttleClass: 'anim error', buttons: [{id: 0, label: 'Fechar', val: 'X'}]});
+				new Messi(data.msg, {title: lang['error'], tttleClass: 'anim error',
+					buttons: [{id: 0, label: 'Fechar', val: 'X'}]});
 			}
 		}, error : function (data, status, e) {
 			general_error( lang['dist_error_mrkdel'] );
@@ -263,7 +280,9 @@ $(function() {
 	$(document).on('click', '.delete_marker_link', function(e) {
 	e.preventDefault();
 	var link = $(this);
-	new Messi(lang['dist_mrkdel_confirm'], {modal: true, buttons: [{id: 0, label: 'Sim', val: 'S'}, {id: 1, label: 'Não', val: 'N'}], callback: function(val) { if(val=='S') delete_marker_map(link); }});
+	new Messi(lang['dist_mrkdel_confirm'], {modal: true,
+		buttons: [{id: 0, label: 'Sim', val: 'S'}, {id: 1, label: 'Não', val: 'N'}],
+		callback: function(val) { if(val=='S') delete_marker_map(link); }});
 	return false;
 	}); // delete
 });
@@ -275,9 +294,12 @@ function delete_marker( btn ) {
 		dataType : 'json',
 		success : function (data) {
 			if (data.status === "success") {
-				new Messi( lang['dist_mrkdel_ok'], {title: lang['success'], titleClass: 'success', modal: true, buttons: [{id: 0, label: 'OK', val: 'S'}], callback: function(val) { go_home(); } });
+				new Messi( lang['dist_mrkdel_ok'], {title: lang['success'],
+					titleClass: 'success', modal: true, buttons: [{id: 0, label: 'OK', val: 'S'}],
+					callback: function(val) { go_home(); } });
 			} else {
-				new Messi(data.msg, {title: lang['error'], tttleClass: 'anim error', buttons: [{id: 0, label: 'Fechar', val: 'X'}]});
+				new Messi(data.msg, {title: lang['error'], tttleClass: 'anim error',
+					buttons: [{id: 0, label: 'Fechar', val: 'X'}]});
 			}
 		},
 		error : function (data, status, e) {
@@ -290,7 +312,9 @@ $(function() {
 	$(document).on('click', '.delete_marker_btn', function(e) {
 	e.preventDefault();
 	var btn = $(this);
-	new Messi( lang['dist_mrkdel_confirm'], {modal: true, buttons: [{id: 0, label: 'Sim', val: 'S'}, {id: 1, label: 'Não', val: 'N'}], callback: function(val) { if(val=='S') delete_marker(btn); }});
+	new Messi( lang['dist_mrkdel_confirm'], {modal: true,
+		buttons: [{id: 0, label: 'Sim', val: 'S'}, {id: 1, label: 'Não', val: 'N'}],
+		callback: function(val) { if(val=='S') delete_marker(btn); }});
 	return false;
 	}); // delete
 });

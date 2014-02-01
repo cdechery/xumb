@@ -92,14 +92,14 @@ class User extends MY_Controller {
 
 		if( empty($action) ) {
 			$action = "do_reset";
-			$msg = "Please provide your email"; //TODO lang
+			$msg = xlang('dist_resetpw_email');
 		} else {
 			$email = $this->input->post('email', TRUE);
 
 			if( !$this->user_model->email_exists($email) ) {
 				$action = "form";
 				$status = "error";
-				$msg = "Sorry, we can't find this email";
+				$msg = xlang('dist_resetpw_email_nok');
 			} else {
 				// let's generate a new password
 				// not a very tricky one, but feel free to improve this
@@ -123,13 +123,13 @@ class User extends MY_Controller {
 
 				if( $this->user_model->update_password($email, $new_pwd) ) {
 					$status = "success";
-					$msg = "A new password was sent to your email!";
+					$msg = xlang('dist_resetpw_email_ok');
 					$action = "success";
 
 					$this->send_pwd_email($email, $new_pwd);
 				} else {
 					$status = "error";
-					$msg = "There was an error reseting the password";
+					$msg = xlang('dist_resetpw_email_err');
 					$action = "form";
 				}
 			}
