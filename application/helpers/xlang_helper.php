@@ -51,7 +51,7 @@
         if( isset($CI->lang->language['dist_lbl_'.$line]) ) {
             return $CI->lang->language['dist_lbl_'.$line];
         } else {
-            return "";
+            return $line."-labelnotfound";
         }
     }
 ?>

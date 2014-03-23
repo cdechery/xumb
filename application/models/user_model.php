@@ -4,6 +4,7 @@ class User_model extends MY_Model {
 
 	public function __construct() 	{
 		parent::__construct();
+		$this->load->config('custom_user');
 	}
 	
 	public function get_data($userid) {
@@ -64,10 +65,14 @@ class User_model extends MY_Model {
 			'name' => $user_data['name'],
 			'surname' => $user_data['surname'],
 			'email' => $user_data['email'],
-			'city' => $user_data['city'],
-			'country' => $user_data['country'],
-			'zip_code' => $user_data['zip_code']
 		);
+
+		$custfields = $this->config->item('custuser_info');
+		if( count($custfields) ) {
+			foreach ($custfields as $field) {
+				$upd_data[ $field['table_column'] ] = $user_data[ $field['form_name'] ];
+			}
+		}
 
 		if( !empty($user_data['password']) ) {
 			$upd_data['password'] = md5($user_data['password']);

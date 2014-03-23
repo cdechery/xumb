@@ -339,16 +339,19 @@ function processInLineLabels() {
 	$('input[title]').each(function() {
 		if($(this).val() === '') {
 			$(this).val($(this).attr('title'));
+			$(this).addClass('inlinelabel');
 		}
 		
 		$(this).focus(function() {
 			if($(this).val() == $(this).attr('title')) {
-				$(this).val('').addClass('focused');
+				$(this).val('');
+				$(this).removeClass('inlinelabel');
 			}
 		});
+
 		$(this).blur(function() {
 			if($(this).val() === '') {
-				$(this).val($(this).attr('title')).removeClass('focused');
+				$(this).val($(this).attr('title')).addClass('inlinelabel');
 			}
 		});
 	});

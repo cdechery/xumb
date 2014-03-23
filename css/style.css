@@ -91,7 +91,7 @@ a:active {
 	background-color: #ffffff;
 }
 
-#input_text { 
-    color: #999 !important;
+input.inlinelabel { 
+    color: #999;
     font: inherit;
 }

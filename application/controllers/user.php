@@ -5,6 +5,7 @@ class User extends MY_Controller {
 	public function __construct() {
 		parent::__construct();
 		$this->load->model('user_model');
+		$this->load->config('custom_user');
 	}
 	
 	public function logout() {
@@ -44,7 +45,6 @@ class User extends MY_Controller {
 		$this->form_validation->set_rules('email', xlabel('email'), 'required|is_unique[user.email]|valid_email');
 		$this->form_validation->set_rules('password', xlabel('password'), 'required');
 		$this->form_validation->set_rules('password_2', xlabel('passconf'), 'required|matches[password]');
-		$this->form_validation->set_rules('zipcode', xlabel('zip'), 'numeric');
 
 		if ($this->form_validation->run() == FALSE) {
 			$status = "ERROR";
@@ -154,12 +154,19 @@ class User extends MY_Controller {
 
 			$this->form_validation->set_error_delimiters('','</br>');
 
-			$this->form_validation->set_rules('name', 'Nome', 'required|min_length[5]|max_length[50]');
-			$this->form_validation->set_rules('surname', 'Sobrenome', 'required|min_length[5]|max_length[50]');
-			$this->form_validation->set_rules('email', 'Email', 'required|valid_email|callback_email_check');
-			$this->form_validation->set_rules('password', 'Senha', '');
-			$this->form_validation->set_rules('password_2', 'Confirmação de Senha', 'matches[password]');
-			$this->form_validation->set_rules('zipcode', 'CEP', 'numeric');
+			$this->form_validation->set_rules('name', xlabel('name'), 'required|min_length[5]|max_length[50]');
+			$this->form_validation->set_rules('surname', xlabel('surname'), 'required|min_length[5]|max_length[50]');
+			$this->form_validation->set_rules('email', xlabel('email'), 'required|valid_email|callback_email_check');
+			$this->form_validation->set_rules('password', xlabel('password'), 'required');
+			$this->form_validation->set_rules('password_2', xlabel('passconf'), 'required|matches[password]');
+
+			$custfields = $this->config->item('custuser_info');
+			if( count($custfields) ) {
+				foreach ($custfields as $field) {
+					$this->form_validation->set_rules($field['form_name'],
+						$field['label'], $field['form_validation']);
+				}
+			}
 
 			if ($this->form_validation->run() == FALSE) {
 				$status = "ERROR";
