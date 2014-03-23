@@ -25,7 +25,7 @@ $config['dist'] = array(
 	),
 	'image_settings' => array(
 		'thumb_sizes' => array(80, 150), // size of thumbs to generate
-		'allowed_types' => array('jpeg', 'jpg', 'png'),
+		'allowed_types' => array('jpeg', 'jpg', 'png', 'gif'),
 		'min_image_size' => '200'
 	),
 	'upload' => array(

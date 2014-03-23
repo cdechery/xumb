@@ -11,14 +11,28 @@ function add_thumb_suffix(&$data, $key, $thumb_size) {
 
 function thumb_filename($filename, $thumbSize) {
 	$newFileArray = pathinfo( $filename );
-	return $newFileArray['filename']."_t".$thumbSize.".".$newFileArray['extension'];
+	return $newFileArray['filename']."_t".$thumbSize.".jpg";
 	
 }
 
 function create_square_cropped_thumb($imgFullPath, $size) {
 
 	// generate thumb
-	$img = imagecreatefromjpeg( $imgFullPath );
+	$type = exif_imagetype( $imgFullPath );
+	switch( $type ) {
+		case IMAGETYPE_JPEG:
+			$img = imagecreatefromjpeg( $imgFullPath );
+			break;
+		case IMAGETYPE_GIF:
+			$img = imagecreatefromgif( $imgFullPath );
+			break;
+		case IMAGETYPE_PNG:
+			$img = imagecreatefrompng( $imgFullPath );
+			break;
+		default:
+			return;
+	}
+
 	$width = imagesx( $img );
 	$height = imagesy( $img );
 
@@ -43,7 +57,7 @@ function create_square_cropped_thumb($imgFullPath, $size) {
 
 	// novo nome
 	$newFileArray = pathinfo( $imgFullPath );
-	$thmbFileName = $newFileArray['dirname']."/".$newFileArray['filename']."_t$size.".$newFileArray['extension'];
+	$thmbFileName = $newFileArray['dirname']."/".$newFileArray['filename']."_t".$size.".jpg";
 
 	imagejpeg( $tmp_img, $thmbFileName );
 

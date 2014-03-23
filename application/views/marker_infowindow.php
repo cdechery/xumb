@@ -21,8 +21,12 @@
 <?php echo $data['name'];?><br>
 <?php echo wordwrap($desc, 39); ?><br>
 <?php
+	$imagesToShow = 3;
+	$imagesShown = 0;
 	foreach ($data['images'] as $img) {
-		$thumb = $img->filename = thumb_filename($img->filename, "100");
+		if( $imagesShown >= $imagesToShow ) break;
+		$imagesShown++;
+		$thumb = $img->filename = thumb_filename($img->filename, "80");
 ?>
 	<img src="<?php echo base_url().$path.$thumb; ?>">  
 <?php
