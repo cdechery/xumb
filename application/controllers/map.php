@@ -84,6 +84,17 @@ class Map extends MY_Controller {
 		$this->load->view('foot');
 	}
 
+	// this method can be used to have Xumb work with 
+	// a single user, and show and manipulate its markers
+	private function _set_fixed_user( $userid ) {
+		if( !$this->is_user_logged_in ) {
+			$this->load->helper('xlogin');
+			return $this->xlogin->set_user_session( $userid );
+		} else {
+			return true;
+		}
+	}
+
 	public function marker_infowindow($marker_id) {
 		$data = $this->map_model->get_marker( $marker_id );
 		$images = $this->image_model->get_marker_images($marker_id);

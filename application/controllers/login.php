@@ -13,22 +13,6 @@ class Login extends MY_Controller {
 		$this->load->view('foot');
 	}
 
-	public function _set_user_session( $user_id ) {
-		$this->load->model('user_model');
-		$user_data = $this->user_model->get_data( $user_id );
-
-		if( FALSE!=$user_data ) {
-			array('logged_in'=>TRUE,
-			  	'user_id' => $data['id'],
-			  	'name' => $data['name'] );
-
-			$this->session->set_userdata( $session_data );
-			return true; 
-		} else {
-			return false;
-		}
-	}
-
 	public function verify() {
 		$this->load->model('user_model');
 		$this->load->helper('url');
