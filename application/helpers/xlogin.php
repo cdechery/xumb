@@ -11,9 +11,9 @@ public function set_user_session( $user_id ) {
 	$user_data = $CI->user_model->get_data( $user_id );
 
 	if( FALSE!=$user_data ) {
-		array('logged_in'=>TRUE,
-		  	'user_id' => $data['id'],
-		  	'name' => $data['name'] );
+		$session_data = array('logged_in'=>TRUE,
+		  	'user_id' => $user_data['id'],
+		  	'name' => $user_data['name'] );
 
 		$CI->session->set_userdata( $session_data );
 		return true; 
