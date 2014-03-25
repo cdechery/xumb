@@ -40,11 +40,15 @@ class User_model extends MY_Model {
 			'name' => $user_data['name'],
 			'surname' => $user_data['surname'],
 			'email' => $user_data['email'],
-			'city' => $user_data['city'],
-			'country' => $user_data['country'],
-			'zip_code' => $user_data['zip_code'],
 			'password' => md5( $user_data['password'] )
 		);
+
+		$custfields = $this->config->item('custuser_info');
+		if( count($custfields) ) {
+			foreach ($custfields as $field) {
+				$insert_data[ $field['table_column'] ] = $user_data[ $field['form_name'] ];
+			}
+		}
 
 		$this->db->set('creation_date', 'NOW()', false);
 

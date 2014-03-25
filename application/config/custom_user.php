@@ -11,7 +11,7 @@
 | The array below is an example and a template for
 | the format to be used.. If you don't want to use
 | those just leave an empty array
-|	$config['custom_user'] = array();
+|	$config['custuser_info'] = array();
 */
 $config['custuser_info'] = array(
 	array(

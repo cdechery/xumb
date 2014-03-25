@@ -13,7 +13,6 @@ class User extends MY_Controller {
 		redirect( base_url() );
 	}
 
-
 	public function new_user() {
 		if( $this->is_user_logged_in ) {
 			redirect( base_url() );
@@ -45,6 +44,14 @@ class User extends MY_Controller {
 		$this->form_validation->set_rules('email', xlabel('email'), 'required|is_unique[user.email]|valid_email');
 		$this->form_validation->set_rules('password', xlabel('password'), 'required');
 		$this->form_validation->set_rules('password_2', xlabel('passconf'), 'required|matches[password]');
+
+		$custfields = $this->config->item('custuser_info');
+		if( count($custfields) ) {
+			foreach ($custfields as $field) {
+				$this->form_validation->set_rules($field['form_name'],
+					$field['label'], $field['form_validation']);
+			}
+		}
 
 		if ($this->form_validation->run() == FALSE) {
 			$status = "ERROR";
@@ -84,6 +91,53 @@ class User extends MY_Controller {
 
 		$this->load->view('user_form', array('data'=>$user_data) );
 		$this->load->view('foot');
+	}
+
+	public function update() {
+		$status = "";
+		$msg = "";
+
+		if( !$this->is_user_logged_in ) {
+			$status = "error";
+			$msg = xlang('dist_errsess_expire');
+		} else {
+			$user_data = $this->input->post(NULL, TRUE);
+
+			$this->load->helper(array('form', 'url'));
+			$this->load->library('form_validation');
+
+			$this->form_validation->set_error_delimiters('','</br>');
+
+			$this->form_validation->set_rules('name', xlabel('name'), 'required|min_length[5]|max_length[50]');
+			$this->form_validation->set_rules('surname', xlabel('surname'), 'required|min_length[5]|max_length[50]');
+			$this->form_validation->set_rules('email', xlabel('email'), 'required|valid_email|callback_email_check');
+			$this->form_validation->set_rules('password_2', xlabel('passconf'), 'matches[password]');
+
+			$custfields = $this->config->item('custuser_info');
+			if( count($custfields) ) {
+				foreach ($custfields as $field) {
+					$this->form_validation->set_rules($field['form_name'],
+						$field['label'], $field['form_validation']);
+				}
+			}
+
+			if ($this->form_validation->run() == FALSE) {
+				$status = "ERROR";
+				$msg = validation_errors();
+			} else {
+				$ret_update = $this->user_model->update( $user_data, $this->login_data['user_id'] );
+
+				if( $ret_update ) {
+					$status = "OK";
+					$msg = xlang('dist_upduser_ok');
+				} else {
+					$status = "ERROR";
+					$msg = xlang('dist_upduser_nok');
+				}
+			}
+		}
+
+		echo json_encode( array('status'=>$status, 'msg'=>utf8_encode($msg)) );
 	}
 
 	public function reset_password() {
@@ -137,54 +191,6 @@ class User extends MY_Controller {
 
 		$view_params = array('action'=>$action, 'msg'=>$msg, 'status'=>$status);
 		$this->load->view('reset_password', $view_params);
-	}
-
-	public function update() {
-		$status = "";
-		$msg = "";
-
-		if( !$this->is_user_logged_in ) {
-			$status = "error";
-			$msg = xlang('dist_errsess_expire');
-		} else {
-			$user_data = $this->input->post(NULL, TRUE);
-
-			$this->load->helper(array('form', 'url'));
-			$this->load->library('form_validation');
-
-			$this->form_validation->set_error_delimiters('','</br>');
-
-			$this->form_validation->set_rules('name', xlabel('name'), 'required|min_length[5]|max_length[50]');
-			$this->form_validation->set_rules('surname', xlabel('surname'), 'required|min_length[5]|max_length[50]');
-			$this->form_validation->set_rules('email', xlabel('email'), 'required|valid_email|callback_email_check');
-			$this->form_validation->set_rules('password', xlabel('password'), 'required');
-			$this->form_validation->set_rules('password_2', xlabel('passconf'), 'required|matches[password]');
-
-			$custfields = $this->config->item('custuser_info');
-			if( count($custfields) ) {
-				foreach ($custfields as $field) {
-					$this->form_validation->set_rules($field['form_name'],
-						$field['label'], $field['form_validation']);
-				}
-			}
-
-			if ($this->form_validation->run() == FALSE) {
-				$status = "ERROR";
-				$msg = validation_errors();
-			} else {
-				$ret_update = $this->user_model->update( $user_data, $this->login_data['user_id'] );
-
-				if( $ret_update ) {
-					$status = "OK";
-					$msg = xlang('dist_upduser_ok');
-				} else {
-					$status = "ERROR";
-					$msg = xlang('dist_upduser_nok');
-				}
-			}
-		}
-
-		echo json_encode( array('status'=>$status, 'msg'=>utf8_encode($msg)) );
 	}
 
 	public function email_check( $email ) {

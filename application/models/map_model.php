@@ -32,6 +32,13 @@ class Map_model extends MY_Model {
 						'latitude' => $data['latitude'],
 						'longitude' => $data['longitude'] );
 		
+		$custfields = $this->config->item('custmark_info');
+		if( count($custfields) ) {
+			foreach ($custfields as $field) {
+				$update[ $field['table_column'] ] = $data[ $field['form_name'] ];
+			}
+		}
+
 		return( $this->db->update('marker', $update, array('id' => $data['id'])) );	
 	}
 

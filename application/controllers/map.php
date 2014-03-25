@@ -7,6 +7,7 @@ class Map extends MY_Controller {
 		
 		$this->load->model('map_model');
 		$this->load->model('image_model');
+		$this->load->config('custom_marker');
 
 		$this->logged_user_id = $this->login_data['user_id'];
 	}
@@ -151,6 +152,14 @@ class Map extends MY_Controller {
 			$this->form_validation->set_rules('name', xlabel('name'), 'trim|required|min_length[5]|max_length[100]|xss_clean');
 			$this->form_validation->set_rules('description', xlabel('description'), 'trim|max_length[400]|xss_clean');
 			
+			$custfields = $this->config->item('custmark_info');
+			if( count($custfields) ) {
+				foreach ($custfields as $field) {
+					$this->form_validation->set_rules($field['form_name'],
+						$field['label'], $field['form_validation']);
+				}
+			}
+
 			if ( $this->form_validation->run() == FALSE ) {
 				$status = "error";
 				$msg = validation_errors();
