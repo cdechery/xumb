@@ -2,10 +2,14 @@
 /*
  * Custom Xumb helper to provide session manipulation and login
  * functionality across Xumb.
- * Remember to call this from a Controller before any output
- * or call to any viewers
+ * Remember to call this from a Controller or a View before any output
  */
-public function set_user_session( $user_id ) {
+function set_user_session( $user_id ) {
+	$session = $this->session->all_userdata();
+	if( $session["logged_in"] ) {
+		return true;
+	}
+
 	$CI = & get_instance();
 	$CI->load->model('user_model');
 	$user_data = $CI->user_model->get_data( $user_id );

@@ -8,6 +8,7 @@ class Map extends MY_Controller {
 		$this->load->model('map_model');
 		$this->load->model('image_model');
 		$this->load->config('custom_marker');
+		$this->load->helper('xlogin');
 
 		$this->logged_user_id = $this->login_data['user_id'];
 	}
