@@ -5,12 +5,13 @@
  * Remember to call this from a Controller or a View before any output
  */
 function set_user_session( $user_id ) {
-	$session = $this->session->all_userdata();
+	$CI = & get_instance();
+	
+	$session = $CI->session->all_userdata();
 	if( $session["logged_in"] ) {
 		return true;
 	}
 
-	$CI = & get_instance();
 	$CI->load->model('user_model');
 	$user_data = $CI->user_model->get_data( $user_id );
 
